@@ -1,0 +1,22 @@
+{
+    "name": "effectra/http-message",
+    "description": "The Effectra HTTP Message package.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Effectra\\Http\\Message\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mohammed Taha",
+            "email": "bmt.mohammedtaha@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^8.0.2",
+        "psr/http-message": "^2.0@dev"
+    }
+}
