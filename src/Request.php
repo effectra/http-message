@@ -8,8 +8,9 @@ use Psr\Http\Message\UriInterface;
 /**
  * Represents an HTTP request conforming to the PSR-7 standard.
  */
-class Request extends Message implements RequestInterface
+class Request implements RequestInterface
 {
+    use MessageTrait;
     /**
      * @var string The HTTP method.
      */
@@ -31,7 +32,10 @@ class Request extends Message implements RequestInterface
     {
         $this->method = $method;
         $this->uri = $uri;
-        parent::__construct($headers, $body, $version);
+
+        $this->headers = $headers;
+        $this->body = $body;
+        $this->protocolVersion = $version;
     }
     /**
      * Retrieves the HTTP method of the request.
