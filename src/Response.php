@@ -7,8 +7,9 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * Represents an HTTP response conforming to the PSR-7 standard.
  */
-class Response extends Message implements ResponseInterface
+class Response implements ResponseInterface
 {
+    use MessageTrait;
     /**
      * @var int The HTTP status code.
      */
@@ -163,7 +164,10 @@ class Response extends Message implements ResponseInterface
     {
         $this->statusCode = $statusCode;
         $this->reasonPhrase = $reasonPhrase;
-        parent::__construct($headers, $body, $version);
+
+        $this->headers = $headers;
+        $this->body = $body;
+        $this->protocolVersion = $version;
     }
     /**
      * Retrieves the HTTP status code of the response.
