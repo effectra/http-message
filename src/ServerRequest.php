@@ -108,7 +108,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function getUploadedFiles(): array
     {
-        return $_FILES;
+        return $this->uploadedFiles;
     }
     /**
      * Returns an instance with the specified uploaded files.

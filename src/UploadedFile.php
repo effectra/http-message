@@ -3,6 +3,7 @@
 namespace Effectra\Http\Message;
 
 use Psr\Http\Message\UploadedFileInterface;
+use Psr\Http\Message\StreamInterface;
 use RuntimeException;
 
 /**
@@ -68,7 +69,7 @@ class UploadedFile implements UploadedFileInterface
      *
      * @return int|null The file size in bytes or null if unknown
      */
-    public function getSize()
+    public function getSize():int|null
     {
         return $this->size;
     }
@@ -77,7 +78,7 @@ class UploadedFile implements UploadedFileInterface
      *
      * @return int The file upload error code
      */
-    public function getError()
+    public function getError():int
     {
         return $this->error;
     }
@@ -86,7 +87,7 @@ class UploadedFile implements UploadedFileInterface
      *
      * @return string|null The client-provided file name or null if not provided
      */
-    public function getClientFilename()
+    public function getClientFilename():string|null
     {
         return $this->name;
     }
@@ -96,7 +97,7 @@ class UploadedFile implements UploadedFileInterface
      *
      * @return string|null The client-provided media type of the file or null if not provided
      */
-    public function getClientMediaType()
+    public function getClientMediaType():string|null
     {
         return $this->type;
     }
@@ -106,7 +107,7 @@ class UploadedFile implements UploadedFileInterface
      * @return StreamInterface The uploaded file stream
      * @throws RuntimeException If the file has been moved or the stream cannot be created
      */
-    public function getStream()
+    public function getStream():StreamInterface 
     {
         if ($this->moved) {
             throw new RuntimeException('Stream is no longer available');
@@ -123,8 +124,9 @@ class UploadedFile implements UploadedFileInterface
      *
      * @param string $targetPath The target path to move the uploaded file to
      * @throws RuntimeException If the file has already been moved, is not an uploaded file, or an error occurs during the move operation
+     * @return void
      */
-    public function moveTo($targetPath)
+    public function moveTo($targetPath):void
     {
         if ($this->moved) {
             throw new RuntimeException('File has already been moved');
@@ -145,7 +147,7 @@ class UploadedFile implements UploadedFileInterface
      *
      * @return bool True if the file has been moved, false otherwise
      */
-    public function isMoved()
+    public function isMoved():bool
     {
         return $this->moved;
     }
