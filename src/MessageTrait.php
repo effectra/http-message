@@ -41,7 +41,7 @@ trait MessageTrait {
      */
     public function getHeader(string $name): array
     {
-        if(isset($this->headers[$name])){
+        if($this->hasHeader($name)){
             $header = $this->headers[$name];
 
             return is_array($header) ? $header : [$header];
