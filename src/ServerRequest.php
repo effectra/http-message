@@ -26,6 +26,10 @@ class ServerRequest extends Request implements ServerRequestInterface
      * @var string The request target.
      */
     protected $requestTarget;
+     /**
+     * @var array The cookies.
+     */
+    protected $cookies;
     /**
      * @var array The uploaded files.
      */
@@ -57,7 +61,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function getServerParams(): array
     {
-        return $_SERVER;
+        return $this->attributes;
     }
     /**
      * Retrieves the cookie parameters.
@@ -66,7 +70,7 @@ class ServerRequest extends Request implements ServerRequestInterface
      */
     public function getCookieParams(): array
     {
-        return $_COOKIE;
+        return $this->cookies;
     }
     /**
      * Returns an instance with the specified cookie parameters.
@@ -77,7 +81,7 @@ class ServerRequest extends Request implements ServerRequestInterface
     public function withCookieParams(array $cookies): static
     {
         $new = clone $this;
-        $_COOKIE = $cookies;
+        $new->cookies = $cookies;
         return $new;
     }
     /**
@@ -128,10 +132,10 @@ class ServerRequest extends Request implements ServerRequestInterface
         // Create a new instance of the ServerRequest with the updated uploaded files.
         // In this example, we assume the existence of a constructor that accepts the uploaded files.
 
-        $newRequest = clone $this;
-        $newRequest->uploadedFiles = $uploadedFiles;
+        $new = clone $this;
+        $new->uploadedFiles = $uploadedFiles;
 
-        return $newRequest;
+        return $new;
     }
     /**
      * Check if a given value is a valid UploadedFileInterface instance.
