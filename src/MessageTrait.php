@@ -7,7 +7,8 @@ use Psr\Http\Message\StreamInterface;
 /**
  * Trait implementing functionality common to requests and responses.
  */
-trait MessageTrait {
+trait MessageTrait
+{
     /**
      * @var string The HTTP protocol version.
      */
@@ -41,7 +42,7 @@ trait MessageTrait {
      */
     public function getHeader(string $name): array
     {
-        if($this->hasHeader($name)){
+        if ($this->hasHeader($name)) {
             $header = $this->headers[$name];
 
             return is_array($header) ? $header : [$header];
@@ -85,11 +86,89 @@ trait MessageTrait {
      * @param string $version The HTTP protocol version.
      * @return self
      */
+    public function setProtocolVersion(string $version): self
+    {
+        $this->protocolVersion = $version;
+        return $this;
+    }
+    
+    /**
+     * Returns an instance with the specified header value.
+     *
+     * @param string          $name  The header name.
+     * @param string|string[] $value The header value.
+     * @return self
+     * @throws \InvalidArgumentException If the header value is not a string or an array of strings.
+     */
+    public function setHeader(string $name, $value): self
+    {
+        if (!is_string($value) && !is_array($value)) {
+            throw new \InvalidArgumentException('Header value must be a string or an array of strings');
+        }
+
+        $normalizedValue = $this->normalizeHeaderValues($value);
+
+        $this->headers[$name] = $normalizedValue;
+        return $this;
+    }
+    /**
+     * Returns an instance with the specified headers.
+     *
+     * @param array $headers An array of headers.
+     * @return self
+     */
+    public function setHeaders(array $headers): self
+    {
+        foreach ($headers as $header) {
+            $this->headers[strtolower(key($header))] = (array) $header[key($header)];
+        }
+        return $this;
+    }
+    /**
+     * Returns an instance with the specified appended header value.
+     *
+     * @param string          $name  The header name.
+     * @param string|string[] $value The header value.
+     * @return self
+     * @throws \InvalidArgumentException If the header value is not a string or an array of strings.
+     */
+    public function AddHeader(string $name, $value): self
+    {
+        if (!is_string($value) && !is_array($value)) {
+            throw new \InvalidArgumentException('Header value must be a string or an array of strings');
+        }
+
+        $normalizedValue = $this->normalizeHeaderValues($value);
+
+        if (isset($this->headers[$name])) {
+            $this->headers[$name] = array_merge($this->headers[$name], $normalizedValue);
+        } else {
+            $this->headers[$name] = $normalizedValue;
+        }
+        return $this;
+    }
+    
+    /**
+     * Returns an instance with the specified message body.
+     *
+     * @param StreamInterface|string $body The message body.
+     * @return self
+     */
+    public function setBody(StreamInterface|string $body): self
+    {
+        $this->body = $body;
+        return $this;
+    }
+    /**
+     * Returns an instance with the specified protocol version.
+     *
+     * @param string $version The HTTP protocol version.
+     * @return self
+     */
     public function withProtocolVersion(string $version): self
     {
-        $new = clone $this;
-        $new->protocolVersion = $version;
-        return $new;
+        $this->protocolVersion = $version;
+        return $this;
     }
     /**
      * Checks if a header exists.

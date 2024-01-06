@@ -202,6 +202,30 @@ class Response implements ResponseInterface
         $clone->reasonPhrase =  $reasonPhrase;
         return $clone;
     }
+
+    /**
+     * set the specific status code and reason phrase.
+     *
+     * @param mixed       $code         The HTTP status code.
+     * @param string|null $reasonPhrase The reason phrase associated with the status code.
+     * @return static
+     * @throws \InvalidArgumentException If the status code is invalid.
+     */
+
+     public function setStatus($code, $reasonPhrase = ''): static
+     {
+         // Validate the status code.
+         if ($code < 100 || $code >= 600) {
+             throw new \InvalidArgumentException('Invalid status code.');
+         }
+         if (empty($reasonPhrase)) {
+             $reasonPhrase = static::$statusTexts[$code] ?? '';
+         }
+ 
+         $this->statusCode = $code;
+         $this->reasonPhrase =  $reasonPhrase;
+         return $this;
+     }
     /**
      * Retrieves the reason phrase associated with the status code.
      *

@@ -94,6 +94,19 @@ class Request implements RequestInterface
         return $clone;
     }
 
+
+    /**
+     * Set the specific HTTP method.
+     *
+     * @param mixed $method The HTTP method.
+     * @return static
+     */
+    public function setMethod($method): static
+    {
+        $this->method = strtoupper($method);
+        return $this;
+    }
+
     /**
      * Returns an instance with the specific HTTP method.
      *
@@ -132,5 +145,32 @@ class Request implements RequestInterface
         }
 
         return $clone;
+    }
+
+    /**
+     * Returns an instance with the specific URI.
+     *
+     * @param UriInterface $uri          The request URI.
+     * @param bool         $preserveHost Whether to preserve the Host header.
+     * @return static
+     */
+    public function setUri(UriInterface $uri, $preserveHost = false): static
+    {
+        $this->uri = $uri;
+
+        if (!$preserveHost) {
+            $hostHeader = $this->getHeaderLine('Host');
+            if ($hostHeader !== '') {
+                $this->withoutHeader('Host');
+            }
+            if ($uri->getHost() !== '') {
+                $this->withHeader('Host', $uri->getHost());
+                if ($uri->getPort() !== null) {
+                    $this->withHeader('Host', $uri->getHost() . ':' . $uri->getPort());
+                }
+            }
+        }
+
+        return $this;
     }
 }
